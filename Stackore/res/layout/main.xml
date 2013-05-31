@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Stackore_Activity" >     
+    
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true"
+        android:contentDescription="logo"
+        android:src="@drawable/logo" />
+
+    <ImageView
+        android:id="@+id/btnGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgLogo"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:contentDescription="play"
+        android:onClick="onClickGame"
+        android:src="@drawable/play" />
+
+    <ImageView
+        android:id="@+id/btnHowto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnGame"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:contentDescription="@string/HowTo"
+        android:onClick="onClickHowto"
+        android:src="@drawable/howto" />
+
+    <ImageView
+        android:id="@+id/btnCredits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnHowto"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:contentDescription="@string/Credits"
+        android:onClick="onClickCredits"
+        android:src="@drawable/credits" />
+
+    <com.google.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="false"
+        ads:adSize="BANNER"
+        ads:adUnitId="a151a80a6df225f"
+        android:gravity="bottom"
+        ads:loadAdOnCreate="false"
+        ads:test="true"
+        android:visibility="visible" />
+
+</RelativeLayout>

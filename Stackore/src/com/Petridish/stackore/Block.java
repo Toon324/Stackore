@@ -53,6 +53,7 @@ public class Block {
 	}
 
 	public void draw(AndroidGraphics g) {
+		/*
 		g.drawSizedImage(Assets.block, position * size.x + playCorner.x, playSize.y - row
 				* size.y - playCorner.y, size.x, size.y);
 		
@@ -63,5 +64,6 @@ public class Block {
 		if (numOfBlocks == 3)
 			g.drawSizedImage(Assets.block, (position + 1) * size.x
 					+ playCorner.x, playSize.y - row * size.y - playCorner.y, size.x, size.y);
+					*/
 	}
 }
