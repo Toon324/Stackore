@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     tools:context=".Stackore_Activity" >
 
-    <ImageView
-        android:id="@+id/mainImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background_proto"
-        android:contentDescription="Background"/>
+    <com.Petridish.stackore.GameSurface 
+        android:id="@+id/gamesurface"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>

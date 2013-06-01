@@ -35,8 +35,8 @@ public final class R {
         public static final int btnCredits=0x7f080004;
         public static final int btnGame=0x7f080002;
         public static final int btnHowto=0x7f080003;
+        public static final int gamesurface=0x7f080000;
         public static final int imgLogo=0x7f080001;
-        public static final int mainImageView=0x7f080000;
     }
     public static final class layout {
         public static final int credits=0x7f030000;
