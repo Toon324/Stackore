@@ -22,8 +22,8 @@ public class MainMenu extends Activity {
 
 		AdView adView = (AdView) findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest();
-		adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
-		// adRequest.addTestDevice("E213A781A27DEE785F5CCD8A07BF21BF");
+		//adRequest.addTestDevice(AdRequest.TEST_EMULATOR);
+		adRequest.addTestDevice("E213A781A27DEE785F5CCD8A07BF21BF");
 		adView.loadAd(adRequest);
 	}
 

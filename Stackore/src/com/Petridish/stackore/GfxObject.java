@@ -55,8 +55,12 @@ public class GfxObject {
 			y = maxY;
 	}
 
-	public void draw(Canvas canvas, float x, float y, Paint paint) {
+	public void drawCentered(Canvas canvas, float x, float y, Paint paint) {
 		canvas.drawBitmap(bitmap, x - bitmap.getWidth() / 2,
 				y - bitmap.getHeight() / 2, paint);
+	}
+	
+	public void drawCornered(Canvas canvas, int x, int y, Paint paint) {
+		canvas.drawBitmap(bitmap, x, y, paint);
 	}
 }

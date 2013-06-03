@@ -3,61 +3,72 @@
  */
 package com.Petridish.stackore;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 /**
  * @author Cody
- *
+ * 
  */
 public class GameEngine {
 
-	 public float screenWidth;
-	  public float screenHeight;
-	  private Paint blackPaint;
-	  private Paint textPaint;
-	  private String currentTimeString;
-	  private BlockController blocks;
+	public float screenWidth;
+	public float screenHeight;
+	private Paint blackPaint;
+	private Paint textPaint;
+	private BlockController blocks;
+	private GfxObject background;
 
-	  public void Init(Context context) {
-	    setSurfaceDimensions(540, 960);
+	public void Init(Context context) {
+		setSurfaceDimensions(540, 960);
 
-	    blackPaint = new Paint();
-	    blackPaint.setColor(Color.BLACK);
-	    blackPaint.setStyle(Style.FILL);
+		blackPaint = new Paint();
+		blackPaint.setColor(Color.BLACK);
+		blackPaint.setStyle(Style.FILL);
 
-	    textPaint = new Paint();
-	    textPaint.setColor(Color.LTGRAY);
-	    textPaint.setTextSize(40);
-	    
-	    blocks = new BlockController(context);
-	    blocks.setPlaySize((int) screenWidth, (int) screenHeight);
-	  }
+		textPaint = new Paint();
+		textPaint.setColor(Color.LTGRAY);
+		textPaint.setTextSize(40);
 
-	  public void onDestroy() {
-	    try {
-	    } catch (Exception e) {
-	    }
-	  }
+		background = new GfxObject();
+		background.bitmap = BitmapFactory.decodeResource(
+				context.getResources(), R.drawable.background_proto);
 
-	  public void setSurfaceDimensions(int width, int height) {
-	    screenWidth = width;
-	    screenHeight = height;
-	  }
+		blocks = new BlockController(context);
 
-	  public void update(int deltatime) {
-	    currentTimeString = new SimpleDateFormat("HH:mm:ss").format(new Date());
-	    blocks.update(deltatime);
-	  }
+		WindowManager wm = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics dm = new DisplayMetrics();
 
-	  public void draw(Canvas canvas) {
-		  canvas.drawColor(Color.BLACK);
-		  blocks.draw(canvas, textPaint);
-	  }
+		wm.getDefaultDisplay().getMetrics(dm);
+
+		blocks.setPlaySize(dm.widthPixels, dm.heightPixels);
+	}
+
+	public void onDestroy() {
+		try {
+		} catch (Exception e) {
+		}
+	}
+
+	public void setSurfaceDimensions(int width, int height) {
+		screenWidth = width;
+		screenHeight = height;
+	}
+
+	public void update(int deltatime) {
+		blocks.update(deltatime);
+	}
+
+	public void draw(Canvas canvas) {
+		canvas.drawColor(Color.BLACK);
+		background.drawCornered(canvas, 0, 0, textPaint);
+		blocks.draw(canvas, textPaint);
+	}
 }
