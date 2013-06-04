@@ -77,6 +77,14 @@ public class BlockController {
 			left = !left;
 	}
 	
+	public int getRow() {
+		return row;
+	}
+	
+	public void setRow(int newRow) {
+		row = newRow;
+	}
+	
 	public void draw(Canvas canvas, Paint paint) {
 		block.drawCornered(canvas, position * size.x + playCorner.x, playSize.y - row
 				* size.y - playCorner.y, paint);

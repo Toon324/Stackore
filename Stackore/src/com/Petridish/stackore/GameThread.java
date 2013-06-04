@@ -78,4 +78,9 @@ public class GameThread extends Thread{
 	   }
 	 
 	  }
+
+	public void tapped() {
+		gameEngine.onTap();
+		
+	}
 }
