@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 /**
@@ -25,15 +26,16 @@ public class GameEngine {
 	private Paint blackPaint;
 	private Paint textPaint;
 	private ArrayList<BlockController> blocks;
-	private int activeBlockRow, playWidth, playHeight;
+	private int activeBlockRow;
 	private GfxObject background;
 	private Context engineContext;
+	private static final String logTag = "GameEngine";
 
 	public void Init(Context context) {
 		setSurfaceDimensions(540, 960);
 
 		engineContext = context;
-		
+
 		blackPaint = new Paint();
 		blackPaint.setColor(Color.BLACK);
 		blackPaint.setStyle(Style.FILL);
@@ -47,7 +49,7 @@ public class GameEngine {
 				context.getResources(), R.drawable.background_proto);
 
 		blocks = new ArrayList<BlockController>();
-		
+
 		blocks.add(new BlockController(context));
 
 		WindowManager wm = (WindowManager) context
@@ -56,10 +58,10 @@ public class GameEngine {
 
 		wm.getDefaultDisplay().getMetrics(dm);
 
-		playWidth = dm.widthPixels;
-		playHeight = dm.heightPixels;
-		activeBlockRow = 0;
-		blocks.get(0).setPlaySize(dm.widthPixels, dm.heightPixels);
+		screenWidth = dm.widthPixels;
+		screenHeight = dm.heightPixels;
+		activeBlockRow = 1;
+		blocks.get(0).setPlaySize(screenWidth, screenHeight);
 	}
 
 	public void onDestroy() {
@@ -71,10 +73,17 @@ public class GameEngine {
 	public void setSurfaceDimensions(int width, int height) {
 		screenWidth = width;
 		screenHeight = height;
+
+		if (blocks == null)
+			return;
+
+		for (BlockController c : blocks.toArray(new BlockController[0]))
+			c.setPlaySize(screenWidth, screenHeight);
 	}
 
 	public void update(int deltatime) {
-		blocks.toArray(new BlockController[0])[activeBlockRow].update(deltatime);
+		blocks.toArray(new BlockController[0])[activeBlockRow - 1]
+				.update(deltatime);
 	}
 
 	public void draw(Canvas canvas) {
@@ -85,12 +94,50 @@ public class GameEngine {
 	}
 
 	public void onTap() {
-		blocks.get(activeBlockRow).setActive(false);
-		int lastRow = blocks.get(activeBlockRow).getRow();
-		activeBlockRow++;
+		BlockController lastBlockRow = blocks.get(activeBlockRow - 1);
+		lastBlockRow.setActive(false);
 		BlockController newBlockRow = new BlockController(engineContext);
-		newBlockRow.setRow(lastRow+1);
-		newBlockRow.setPlaySize(playWidth, playHeight);
+
+		if (activeBlockRow - 2 >= 0) {
+			int nextRowNum = lastBlockRow.getNumberOfBlocks();
+
+			if (!blocks.get(activeBlockRow - 2).isBlockSupported(
+					lastBlockRow.getPosition())) {
+
+				lastBlockRow.setBlockUnsupported(lastBlockRow.getPosition());
+
+				nextRowNum--;
+				Log.d(logTag, "Next Row Size: " + nextRowNum);
+			}
+
+			if (!blocks.get(activeBlockRow - 2).isBlockSupported(
+					lastBlockRow.getPosition() - 1)) {
+
+				lastBlockRow
+						.setBlockUnsupported(lastBlockRow.getPosition() - 1);
+				nextRowNum--;
+				Log.d(logTag, "Next Row Size: " + nextRowNum);
+			}
+
+			if (!blocks.get(activeBlockRow - 2).isBlockSupported(
+					lastBlockRow.getPosition() + 1)) {
+
+				lastBlockRow
+						.setBlockUnsupported(lastBlockRow.getPosition() + 1);
+				nextRowNum--;
+				Log.d(logTag, "Next Row Size: " + nextRowNum);
+			}
+			
+			newBlockRow.setNumberOfBlocks(nextRowNum);
+		}
+
+		int lastRow = blocks.get(activeBlockRow - 1).getRow();
+		activeBlockRow++;
+
+		
+		newBlockRow.setRow(lastRow + 1);
+		newBlockRow.setPlaySize(screenWidth, screenHeight);
+
 		blocks.add(newBlockRow);
 	}
 }

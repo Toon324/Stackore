@@ -54,6 +54,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 	}
+	
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
@@ -69,6 +70,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
+		
 		gameEngine.setSurfaceDimensions(width, height);
 	}
 
