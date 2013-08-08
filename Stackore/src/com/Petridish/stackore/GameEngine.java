@@ -6,15 +6,14 @@ package com.Petridish.stackore;
 import java.util.ArrayList;
 import java.util.Random;
 
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
@@ -26,13 +25,14 @@ import android.view.WindowManager;
 public class GameEngine {
 
 	private final int INCREASE_SPEED = 50;
-	
+
 	public float screenWidth;
 	public float screenHeight;
 	private Paint blackPaint;
 	private Paint textPaint;
 	private ArrayList<BlockController> blocks;
-	private int activeBlockRow, outterColor, innerColor;
+	private int activeBlockRow, outerColor, innerColor;
+	private boolean useImage;
 	private double margin;
 	private GfxObject background;
 	private Context engineContext;
@@ -43,6 +43,14 @@ public class GameEngine {
 		setSurfaceDimensions(540, 960);
 
 		engineContext = context;
+
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(engineContext);
+
+		useImage = prefs.getBoolean("picture_preference", false);
+		outerColor = prefs.getInt("OutterColor", Color.RED);
+		innerColor = prefs.getInt("InnerColor", Color.BLACK);
+		margin = prefs.getFloat("Margin", .18f);
 
 		blackPaint = new Paint();
 		blackPaint.setColor(Color.BLACK);
@@ -69,14 +77,12 @@ public class GameEngine {
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
 		activeBlockRow = 1;
-		//blocks.get(0).setPlaySize(screenWidth, screenHeight);
+		// blocks.get(0).setPlaySize(screenWidth, screenHeight);
 		blocks.get(0).setPlaySize(570, 1246);
 		blocks.get(0).setPlayCorner(15, 130);
-		
-		SharedPreferences pref = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
-		outterColor = pref.getInt("OutterColor", Color.RED);
-		innerColor = pref.getInt("InnerColor", Color.BLACK);
-		margin = pref.getFloat("Margin", .18f);
+		blocks.get(0).setImageUse(useImage);
+		blocks.get(0).setOuterColor(outerColor);
+		blocks.get(0).setInnerColor(innerColor);
 	}
 
 	public void onDestroy() {
@@ -109,22 +115,22 @@ public class GameEngine {
 	}
 
 	public void onTap() {
-		
-		//Creates a new row and updates the engine's references
+
+		// Creates a new row and updates the engine's references
 		BlockController lastBlockRow = blocks.get(activeBlockRow - 1);
 		lastBlockRow.setActive(false);
 		BlockController newBlockRow = new BlockController(engineContext);
-		
-		//Copies size of play area over to new row
-		lastBlockRow.copyPlaySizeTo(newBlockRow);
-		lastBlockRow.copyPlayCornerTo(newBlockRow);
-		
-		//Increases the speed of the row
+
+		// Copies data to new block row
+		lastBlockRow.copyData(newBlockRow);
+
+		// Increases the speed of the row
 		newBlockRow.setSpeed(lastBlockRow.getSpeed() - INCREASE_SPEED);
-		
-		//Sets the row to go either left or right.
+
+		// Sets the row to go either left or right.
 		Random gen = new Random();
-		newBlockRow.setDirection(gen.nextBoolean()); //True is left, false is right.
+		newBlockRow.setDirection(gen.nextBoolean()); // True is left, false is
+														// right.
 
 		if (activeBlockRow - 2 >= 0) {
 			int nextRowNum = lastBlockRow.getNumberOfBlocks();
@@ -157,7 +163,7 @@ public class GameEngine {
 				nextRowNum--;
 				Log.d(logTag, "Next Row Size: " + nextRowNum);
 			}
-			
+
 			if (nextRowNum == 0)
 				if (gameActivity != null) {
 					gameActivity.showGameOver();
@@ -165,7 +171,7 @@ public class GameEngine {
 
 			newBlockRow.setNumberOfBlocks(nextRowNum);
 		}
-		
+
 		int lastRow = blocks.get(activeBlockRow - 1).getRow();
 		activeBlockRow++;
 
@@ -174,9 +180,9 @@ public class GameEngine {
 
 		blocks.add(newBlockRow);
 	}
-	
+
 	public BlockController getCurrentRow() {
-		return blocks.get(activeBlockRow-1);
+		return blocks.get(activeBlockRow - 1);
 	}
 
 	public static void GiveActivity(Game game) {

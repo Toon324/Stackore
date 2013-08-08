@@ -3,18 +3,35 @@
  */
 package com.Petridish.stackore;
 
-import android.app.Activity;
+import java.util.List;
+
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Button;
 
 /**
  * @author Cody
  *
  */
-public class Options extends Activity {
+public class Options extends PreferenceActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.preferences);
-	}
+		
+		getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+    }
+
+    public static class MyPreferenceFragment extends PreferenceFragment
+    {
+        @Override
+        public void onCreate(final Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs);
+        }
+    }
 }
