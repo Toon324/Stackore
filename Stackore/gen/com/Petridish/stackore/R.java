@@ -27,30 +27,31 @@ public final class R {
         public static final int howto=0x7f020003;
         public static final int ic_launcher=0x7f020004;
         public static final int logo=0x7f020005;
-        public static final int play=0x7f020006;
+        public static final int options=0x7f020006;
+        public static final int play=0x7f020007;
     }
     public static final class id {
         public static final int action_settings=0x7f080006;
         public static final int adView=0x7f080005;
-        public static final int btnCredits=0x7f080004;
         public static final int btnGame=0x7f080002;
         public static final int btnHowto=0x7f080003;
+        public static final int btnOptions=0x7f080004;
         public static final int gamesurface=0x7f080000;
         public static final int imgLogo=0x7f080001;
     }
     public static final class layout {
-        public static final int credits=0x7f030000;
-        public static final int game=0x7f030001;
-        public static final int howto=0x7f030002;
-        public static final int main=0x7f030003;
+        public static final int game=0x7f030000;
+        public static final int howto=0x7f030001;
+        public static final int main=0x7f030002;
+        public static final int preferences=0x7f030003;
     }
     public static final class menu {
         public static final int stackore_=0x7f070000;
     }
     public static final class string {
-        public static final int Credits=0x7f050004;
         public static final int Game=0x7f050003;
         public static final int HowTo=0x7f050005;
+        public static final int Options=0x7f050004;
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
         public static final int main=0x7f050002;

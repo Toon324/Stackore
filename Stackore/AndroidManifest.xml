@@ -46,8 +46,8 @@
         </activity>
         
         <activity 
-            android:name=".Credits"
-            android:label="Credits"
+            android:name=".Options"
+            android:label="Options"
             android:screenOrientation="portrait">
         </activity>
         

@@ -28,6 +28,7 @@ public class BlockController {
 
 		block = new Block(context.getResources());
 		size = new Point(block.bitmap.getWidth(), block.bitmap.getHeight());
+		block.setSize(size);
 	}
 
 	public void setPlaySize(float screenWidth, float screenHeight) {
@@ -87,7 +88,7 @@ public class BlockController {
 		else
 			position += 1;
 
-		if (position >= 4 || position <= 0)
+		if (position >= 5 || position <= 1)
 			left = !left;
 	}
 
@@ -101,16 +102,16 @@ public class BlockController {
 
 	public void draw(Canvas canvas, Paint paint) {
 		if (numOfBlocks >= 1 && !middleUnsupported)
-			block.drawCornered(canvas, position * size.x + playCorner.x,
-					playSize.y - row * size.y - playCorner.y, paint);
+			block.draw(canvas, position * size.x + playCorner.x,
+					playSize.y - (row-1) * size.y - playCorner.y);
 
-		if (numOfBlocks >= 2 && !leftUnsupported)
-			block.drawCornered(canvas, (position - 1) * size.x + playCorner.x,
-					playSize.y - row * size.y - playCorner.y, paint);
+		if (numOfBlocks >= 2 && !leftUnsupported && position != 1)
+			block.draw(canvas, (position - 1) * size.x + playCorner.x,
+					playSize.y - (row-1) * size.y - playCorner.y);
 
-		if (numOfBlocks == 3 && !rightUnsupported)
-			block.drawCornered(canvas, (position + 1) * size.x + playCorner.x,
-					playSize.y - row * size.y - playCorner.y, paint);
+		if (numOfBlocks == 3 && !rightUnsupported && position != 5)
+			block.draw(canvas, (position + 1) * size.x + playCorner.x,
+					playSize.y - (row-1) * size.y - playCorner.y);
 	}
 
 	public int getPosition() {
@@ -136,5 +137,21 @@ public class BlockController {
 		else
 			rightUnsupported = true;
 
+	}
+
+	public void copyPlaySizeTo(BlockController newBlockRow) {
+		newBlockRow.setPlaySize(playSize.x, playSize.y);
+	}
+
+	public void copyPlayCornerTo(BlockController newBlockRow) {
+		newBlockRow.setPlayCorner(playCorner.x, playCorner.y);
+	}
+
+	public int getSpeed() {
+		return updateSpeed;
+	}
+
+	public void setDirection(boolean dir) {
+		left = dir;
 	}
 }
