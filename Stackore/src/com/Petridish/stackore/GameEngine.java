@@ -6,6 +6,7 @@ package com.Petridish.stackore;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +25,7 @@ import android.view.WindowManager;
  */
 public class GameEngine {
 
-	private final int INCREASE_SPEED = 70;
+	private final int INCREASE_SPEED = 50;
 	
 	public float screenWidth;
 	public float screenHeight;
@@ -159,7 +160,7 @@ public class GameEngine {
 			
 			if (nextRowNum == 0)
 				if (gameActivity != null) {
-					gameActivity.finish();
+					gameActivity.showGameOver();
 				}
 
 			newBlockRow.setNumberOfBlocks(nextRowNum);
