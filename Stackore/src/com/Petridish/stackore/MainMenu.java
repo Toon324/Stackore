@@ -2,9 +2,12 @@ package com.Petridish.stackore;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
@@ -15,10 +18,25 @@ import com.google.ads.AdView;
  */
 public class MainMenu extends Activity {
 
+	private MediaPlayer player;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		try {
+		AssetFileDescriptor afd = getAssets().openFd("title1.mp3");
+	    player = new MediaPlayer();
+	    player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+	    player.prepare();
+	    player.start();
+		}
+		catch (Exception e) {
+			Log.v("Player", "error occured");
+			Log.e("Player", e.getMessage());
+		}
 
 		AdView adView = (AdView) findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest();
@@ -30,6 +48,7 @@ public class MainMenu extends Activity {
 	public void onClickGame(View v) {
 		Intent intent = new Intent(this, Game.class);
 		startActivity(intent);
+		player.release();
 	}
 
 	public void onClickHowto(View v) {

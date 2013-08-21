@@ -35,7 +35,7 @@ public class BlockController {
 		innerPaint.setColor(Color.BLACK);
 		
 		outerPaint = new Paint();
-		outerPaint.setColor(Color.RED);
+		outerPaint.setColor(Color.BLUE);
 
 		block = new Block(context.getResources());
 		size = new Point(block.bitmap.getWidth(), block.bitmap.getHeight());
@@ -100,12 +100,15 @@ public class BlockController {
 	}
 
 	private void move() {
+		if (numOfBlocks == 0)
+			return;
+		
 		if (left)
 			position -= 1;
 		else
 			position += 1;
 
-		if (position >= 5 || position <= 1)
+		if (position >= 6 || position <= 0)
 			left = !left;
 	}
 
@@ -122,37 +125,37 @@ public class BlockController {
 		if (usesImage) {
 			if (numOfBlocks >= 1 && !middleUnsupported)
 				block.draw(canvas, position * size.x + playCorner.x, playSize.y
-						- (row - 1) * size.y - playCorner.y);
+						- (row) * size.y - playCorner.y);
 
-			if (numOfBlocks >= 2 && !leftUnsupported && position != 1)
+			if (numOfBlocks >= 2 && !leftUnsupported && position != 0)
 				block.draw(canvas, (position - 1) * size.x + playCorner.x,
-						playSize.y - (row - 1) * size.y - playCorner.y);
+						playSize.y - (row) * size.y - playCorner.y);
 
-			if (numOfBlocks == 3 && !rightUnsupported && position != 5)
+			if (numOfBlocks == 3 && !rightUnsupported && position != 6)
 				block.draw(canvas, (position + 1) * size.x + playCorner.x,
-						playSize.y - (row - 1) * size.y - playCorner.y);
+						playSize.y - (row) * size.y - playCorner.y);
 		} else {
 			if (numOfBlocks >= 1 && !middleUnsupported) {
 				canvas.drawRect(position * size.x + playCorner.x,
-						playSize.y - (row - 1) * size.y - playCorner.y,
-						position * size.x + playCorner.x + (50 * density), 
-						playSize.y - (row - 1) * size.y - playCorner.y + (50 * density),
+						playSize.y - (row) * size.y - playCorner.y,
+						position * size.x + playCorner.x + (84), 
+						playSize.y - (row) * size.y - playCorner.y + (84),
 						outerPaint);
 
 			}
 
-			if (numOfBlocks >= 2 && !leftUnsupported && position != 1)
+			if (numOfBlocks >= 2 && !leftUnsupported && position != 0)
 				canvas.drawRect((position - 1) * size.x + playCorner.x,
-						playSize.y - (row - 1) * size.y - playCorner.y,
-						(position - 1) * size.x + playCorner.x + (50 * density), playSize.y
-								- (row - 1) * size.y - playCorner.y + (50 * density),
+						playSize.y - (row) * size.y - playCorner.y,
+						(position - 1) * size.x + playCorner.x + (84), playSize.y
+								- (row) * size.y - playCorner.y + (84),
 								outerPaint);
 
-			if (numOfBlocks == 3 && !rightUnsupported && position != 5)
+			if (numOfBlocks == 3 && !rightUnsupported && position != 6)
 				canvas.drawRect((position + 1) * size.x + playCorner.x,
-						playSize.y - (row - 1) * size.y - playCorner.y,
-						(position + 1) * size.x + playCorner.x + (50 * density), playSize.y
-								- (row - 1) * size.y - playCorner.y + (50 * density),
+						playSize.y - (row) * size.y - playCorner.y,
+						(position + 1) * size.x + playCorner.x + (84), playSize.y
+								- (row) * size.y - playCorner.y + (84),
 								outerPaint);
 		}
 	}

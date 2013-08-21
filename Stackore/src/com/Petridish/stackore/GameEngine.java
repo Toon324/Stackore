@@ -24,7 +24,7 @@ import android.view.WindowManager;
  */
 public class GameEngine {
 
-	private final int INCREASE_SPEED = 50;
+	private final int INCREASE_SPEED = 50, SIZEX = 588, SIZEY = 1260, CORNERX = 120, CORNERY = 9;
 
 	public float screenWidth;
 	public float screenHeight;
@@ -49,8 +49,11 @@ public class GameEngine {
 				.getDefaultSharedPreferences(engineContext);
 
 		useImage = prefs.getBoolean("picture_preference", false);
-		outerColor = prefs.getInt("OutterColor", Color.RED);
-		innerColor = prefs.getInt("InnerColor", Color.BLACK);
+		String temp = prefs.getString("outerColor_preference", "1");
+		Log.v("TOON", temp);
+		outerColor = Integer.getInteger(temp, Color.RED);
+		
+		innerColor = Integer.getInteger(prefs.getString("innerColor_preference", Color.BLACK+ ""), Color.BLACK);
 		margin = prefs.getFloat("Margin", .18f);
 
 		blackPaint = new Paint();
@@ -77,12 +80,10 @@ public class GameEngine {
 
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
-		blocks.get(0).setPixelDensity(dm.density);
-		System.out.println("" + dm.scaledDensity);
 		activeBlockRow = 1;
 		// blocks.get(0).setPlaySize(screenWidth, screenHeight);
-		blocks.get(0).setPlaySize(570, 1246);
-		blocks.get(0).setPlayCorner(15, 130);
+		blocks.get(0).setPlaySize(SIZEX, SIZEY);
+		blocks.get(0).setPlayCorner(CORNERX, CORNERY);
 		blocks.get(0).setImageUse(useImage);
 		blocks.get(0).setOuterColor(outerColor);
 		blocks.get(0).setInnerColor(innerColor);
@@ -114,7 +115,7 @@ public class GameEngine {
 	}
 
 	public void draw(Canvas canvas) {
-		if (gameOver)
+		if (gameOver || canvas == null)
 			return;
 		
 		canvas.drawColor(Color.BLACK);
@@ -173,10 +174,12 @@ public class GameEngine {
 				Log.d(logTag, "Next Row Size: " + nextRowNum);
 			}
 
-			if (nextRowNum == 0)
+			if (nextRowNum == 0) {
+				gameOver = true;
 				if (gameActivity != null) {
 					gameActivity.showGameOver();
 				}
+			}
 
 			newBlockRow.setNumberOfBlocks(nextRowNum);
 		}
@@ -188,9 +191,8 @@ public class GameEngine {
 		newBlockRow.setPlaySize(screenWidth, screenHeight);
 
 		blocks.add(newBlockRow);
-		
-		if (newBlockRow.getNumberOfBlocks() == 0)
-			gameOver = true;
+		Log.v("MediaCaller", "Now requesting track row" + (activeBlockRow - 1) + ".mp3");
+		gameActivity.playRowSound(activeBlockRow - 1);
 	}
 
 	public BlockController getCurrentRow() {

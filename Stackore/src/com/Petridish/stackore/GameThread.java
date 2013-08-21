@@ -68,10 +68,6 @@ public class GameThread extends Thread {
 				excess -= sleepTime;
 				overSleepTime = 0L;
 			}
-
-			if (gameEngine.getCurrentRow().getNumberOfBlocks() <= 0)
-				Log.v("Thread", "Would have lost");
-			
 			
 			int skips = 0;
 			while ((excess > delay) && (skips < MAX_FRAME_SKIPS)) {
