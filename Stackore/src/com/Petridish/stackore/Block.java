@@ -17,7 +17,7 @@ public class Block extends GfxObject {
 	private Point size;
 
 	public Block(Resources resources) {
-		bitmap = BitmapFactory.decodeResource(resources, R.drawable.block);
+		bitmap = BitmapFactory.decodeResource(resources, R.drawable.block1);
 		outerColor = Color.RED;
 		innerColor = Color.BLACK;
 		size = new Point(114, 114);

@@ -12,6 +12,7 @@ public class BlockController {
 	private boolean left, active, usesImage;
 	private int position, row, numOfBlocks, updateSpeed, timeSinceUpdate,
 			outerColor, innerColor;
+	private float density;
 	private Point size, playSize, playCorner;
 	private Block block;
 	private static final String logTag = "BlockController";
@@ -28,6 +29,7 @@ public class BlockController {
 		timeSinceUpdate = 0;
 		position = 3;
 		row = 1;
+		density = 1;
 		
 		innerPaint = new Paint();
 		innerPaint.setColor(Color.BLACK);
@@ -116,6 +118,7 @@ public class BlockController {
 	}
 
 	public void draw(Canvas canvas, Paint paint) {
+		
 		if (usesImage) {
 			if (numOfBlocks >= 1 && !middleUnsupported)
 				block.draw(canvas, position * size.x + playCorner.x, playSize.y
@@ -130,25 +133,26 @@ public class BlockController {
 						playSize.y - (row - 1) * size.y - playCorner.y);
 		} else {
 			if (numOfBlocks >= 1 && !middleUnsupported) {
-				canvas.drawRect(position * size.x + playCorner.x, playSize.y
-						- (row - 1) * size.y - playCorner.y, position * size.x
-						+ playCorner.x + 50, playSize.y - (row - 1) * size.y
-						- playCorner.y + 50, outerPaint);
+				canvas.drawRect(position * size.x + playCorner.x,
+						playSize.y - (row - 1) * size.y - playCorner.y,
+						position * size.x + playCorner.x + (50 * density), 
+						playSize.y - (row - 1) * size.y - playCorner.y + (50 * density),
+						outerPaint);
 
 			}
 
 			if (numOfBlocks >= 2 && !leftUnsupported && position != 1)
 				canvas.drawRect((position - 1) * size.x + playCorner.x,
 						playSize.y - (row - 1) * size.y - playCorner.y,
-						(position - 1) * size.x + playCorner.x + 50, playSize.y
-								- (row - 1) * size.y - playCorner.y + 50,
+						(position - 1) * size.x + playCorner.x + (50 * density), playSize.y
+								- (row - 1) * size.y - playCorner.y + (50 * density),
 								outerPaint);
 
 			if (numOfBlocks == 3 && !rightUnsupported && position != 5)
 				canvas.drawRect((position + 1) * size.x + playCorner.x,
 						playSize.y - (row - 1) * size.y - playCorner.y,
-						(position + 1) * size.x + playCorner.x + 50, playSize.y
-								- (row - 1) * size.y - playCorner.y + 50,
+						(position + 1) * size.x + playCorner.x + (50 * density), playSize.y
+								- (row - 1) * size.y - playCorner.y + (50 * density),
 								outerPaint);
 		}
 	}
@@ -197,10 +201,15 @@ public class BlockController {
 		newBlockRow.setImageUse(usesImage);
 		newBlockRow.setOuterColor(outerColor);
 		newBlockRow.setInnerColor(innerColor);
+		newBlockRow.setPixelDensity(density);
 	}
 
 	public void setInnerColor(int ic) {
 		innerColor = ic;
 		innerPaint.setColor(ic);
+	}
+	
+	public void setPixelDensity(float d) {
+		density = d;
 	}
 }

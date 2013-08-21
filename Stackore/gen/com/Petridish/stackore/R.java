@@ -25,8 +25,8 @@ public final class R {
         public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int background_proto=0x7f020000;
-        public static final int block=0x7f020001;
+        public static final int background_proto1=0x7f020000;
+        public static final int block1=0x7f020001;
         public static final int credits=0x7f020002;
         public static final int howto=0x7f020003;
         public static final int ic_launcher=0x7f020004;
@@ -45,9 +45,10 @@ public final class R {
     }
     public static final class layout {
         public static final int game=0x7f030000;
-        public static final int howto=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int preferences=0x7f030003;
+        public static final int gameover=0x7f030001;
+        public static final int howto=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int preferences=0x7f030004;
     }
     public static final class menu {
         public static final int stackore_=0x7f090000;

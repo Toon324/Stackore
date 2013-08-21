@@ -32,7 +32,7 @@ public class GameEngine {
 	private Paint textPaint;
 	private ArrayList<BlockController> blocks;
 	private int activeBlockRow, outerColor, innerColor;
-	private boolean useImage;
+	private boolean useImage, gameOver;
 	private double margin;
 	private GfxObject background;
 	private Context engineContext;
@@ -42,6 +42,7 @@ public class GameEngine {
 	public void Init(Context context) {
 		setSurfaceDimensions(540, 960);
 
+		gameOver = false;
 		engineContext = context;
 
 		SharedPreferences prefs = PreferenceManager
@@ -62,7 +63,7 @@ public class GameEngine {
 
 		background = new GfxObject();
 		background.bitmap = BitmapFactory.decodeResource(
-				context.getResources(), R.drawable.background_proto);
+				context.getResources(), R.drawable.background_proto1);
 
 		blocks = new ArrayList<BlockController>();
 
@@ -76,6 +77,8 @@ public class GameEngine {
 
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
+		blocks.get(0).setPixelDensity(dm.density);
+		System.out.println("" + dm.scaledDensity);
 		activeBlockRow = 1;
 		// blocks.get(0).setPlaySize(screenWidth, screenHeight);
 		blocks.get(0).setPlaySize(570, 1246);
@@ -103,11 +106,17 @@ public class GameEngine {
 	}
 
 	public void update(int deltatime) {
+		if (gameOver)
+			return;
+		
 		blocks.toArray(new BlockController[0])[activeBlockRow - 1]
 				.update(deltatime);
 	}
 
 	public void draw(Canvas canvas) {
+		if (gameOver)
+			return;
+		
 		canvas.drawColor(Color.BLACK);
 		background.drawCornered(canvas, 0, 0, textPaint);
 		for (BlockController c : blocks.toArray(new BlockController[0]))
@@ -179,6 +188,9 @@ public class GameEngine {
 		newBlockRow.setPlaySize(screenWidth, screenHeight);
 
 		blocks.add(newBlockRow);
+		
+		if (newBlockRow.getNumberOfBlocks() == 0)
+			gameOver = true;
 	}
 
 	public BlockController getCurrentRow() {
