@@ -63,4 +63,8 @@ public class GfxObject {
 	public void drawCornered(Canvas canvas, int x, int y, Paint paint) {
 		canvas.drawBitmap(bitmap, x, y, paint);
 	}
+	
+	public void scaleBitmap(int width, int height) {
+		bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+	}
 }

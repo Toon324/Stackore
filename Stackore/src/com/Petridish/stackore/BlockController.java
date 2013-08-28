@@ -13,7 +13,7 @@ public class BlockController {
 	private int position, row, numOfBlocks, updateSpeed, timeSinceUpdate,
 			outerColor, innerColor;
 	private float density;
-	private Point size, playSize, playCorner;
+	private Point blockSize, playSize, playCorner;
 	private Block block;
 	private static final String logTag = "BlockController";
 	private Paint innerPaint, outerPaint;
@@ -30,6 +30,7 @@ public class BlockController {
 		position = 3;
 		row = 1;
 		density = 1;
+		usesImage = true;
 		
 		innerPaint = new Paint();
 		innerPaint.setColor(Color.BLACK);
@@ -38,8 +39,8 @@ public class BlockController {
 		outerPaint.setColor(Color.BLUE);
 
 		block = new Block(context.getResources());
-		size = new Point(block.bitmap.getWidth(), block.bitmap.getHeight());
-		block.setSize(size);
+		blockSize = new Point(block.bitmap.getWidth(), block.bitmap.getHeight());
+		block.setSize(blockSize);
 	}
 
 	public void setPlaySize(float screenWidth, float screenHeight) {
@@ -124,38 +125,38 @@ public class BlockController {
 		
 		if (usesImage) {
 			if (numOfBlocks >= 1 && !middleUnsupported)
-				block.draw(canvas, position * size.x + playCorner.x, playSize.y
-						- (row) * size.y - playCorner.y);
+				block.draw(canvas, position * blockSize.x + playCorner.x, playSize.y
+						- (row) * blockSize.y - playCorner.y);
 
 			if (numOfBlocks >= 2 && !leftUnsupported && position != 0)
-				block.draw(canvas, (position - 1) * size.x + playCorner.x,
-						playSize.y - (row) * size.y - playCorner.y);
+				block.draw(canvas, (position - 1) * blockSize.x + playCorner.x,
+						playSize.y - (row) * blockSize.y - playCorner.y);
 
 			if (numOfBlocks == 3 && !rightUnsupported && position != 6)
-				block.draw(canvas, (position + 1) * size.x + playCorner.x,
-						playSize.y - (row) * size.y - playCorner.y);
+				block.draw(canvas, (position + 1) * blockSize.x + playCorner.x,
+						playSize.y - (row) * blockSize.y - playCorner.y);
 		} else {
-			if (numOfBlocks >= 1 && !middleUnsupported) {
-				canvas.drawRect(position * size.x + playCorner.x,
-						playSize.y - (row) * size.y - playCorner.y,
-						position * size.x + playCorner.x + (84), 
-						playSize.y - (row) * size.y - playCorner.y + (84),
+			
+			if (numOfBlocks >= 1 && !middleUnsupported)
+				canvas.drawRect(position * blockSize.x + playCorner.x,
+						playSize.y - (row) * blockSize.y - playCorner.y,
+						position * blockSize.x + playCorner.x + block.y, 
+						playSize.y - (row) * blockSize.y - playCorner.y + block.x,
 						outerPaint);
 
-			}
 
 			if (numOfBlocks >= 2 && !leftUnsupported && position != 0)
-				canvas.drawRect((position - 1) * size.x + playCorner.x,
-						playSize.y - (row) * size.y - playCorner.y,
-						(position - 1) * size.x + playCorner.x + (84), playSize.y
-								- (row) * size.y - playCorner.y + (84),
+				canvas.drawRect((position - 1) * blockSize.x + playCorner.x,
+						playSize.y - (row) * blockSize.y - playCorner.y,
+						(position - 1) * blockSize.x + playCorner.x + block.x, playSize.y
+								- (row) * blockSize.y - playCorner.y + block.y,
 								outerPaint);
 
 			if (numOfBlocks == 3 && !rightUnsupported && position != 6)
-				canvas.drawRect((position + 1) * size.x + playCorner.x,
-						playSize.y - (row) * size.y - playCorner.y,
-						(position + 1) * size.x + playCorner.x + (84), playSize.y
-								- (row) * size.y - playCorner.y + (84),
+				canvas.drawRect((position + 1) * blockSize.x + playCorner.x,
+						playSize.y - (row) * blockSize.y - playCorner.y,
+						(position + 1) * blockSize.x + playCorner.x + block.x, playSize.y
+								- (row) * blockSize.y - playCorner.y + block.y,
 								outerPaint);
 		}
 	}
@@ -205,6 +206,7 @@ public class BlockController {
 		newBlockRow.setOuterColor(outerColor);
 		newBlockRow.setInnerColor(innerColor);
 		newBlockRow.setPixelDensity(density);
+		newBlockRow.setBlockSize(blockSize.x);
 	}
 
 	public void setInnerColor(int ic) {
@@ -214,5 +216,10 @@ public class BlockController {
 	
 	public void setPixelDensity(float d) {
 		density = d;
+	}
+
+	public void setBlockSize(int x) {
+		blockSize.x = x;
+		block.scaleBitmap(x, x);
 	}
 }

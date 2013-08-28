@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Graphics" >
+        
+        <CheckBoxPreference
+            android:key="picture_preference"
+            android:summary="If checked, loads an image for drawing the boxs in the game. Else, draws boxes with the graphics engine."
+            android:title="Use images for boxes?" />
+        
+        <ListPreference
+            android:entries="@array/colorList"
+            android:entryValues="@array/colorValues"
+            android:key="innerColor_preference"
+            android:summary="Color for inner part of box that will be drawn if Image Preference is false."
+            android:title="Inner Color" />
+        
+        <ListPreference
+            android:entries="@array/colorList"
+            android:entryValues="@array/colorValues"
+            android:key="outerColor_preference"
+            android:summary="Color for outer part of box that will be drawn if Image Preference is false."
+            android:title="Outer Color" />
+        
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Sound" >
+        <CheckBoxPreference
+            android:key="sound_preference"
+            android:summary="Do you want any sound to play?"
+            android:title="Play sounds?" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

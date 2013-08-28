@@ -24,10 +24,11 @@ import android.view.WindowManager;
  */
 public class GameEngine {
 
-	private final int INCREASE_SPEED = 50, SIZEX = 588, SIZEY = 1260, CORNERX = 120, CORNERY = 9;
+	private final int INCREASE_SPEED = 50, SIZEX = 588, SIZEY = 1260,
+			CORNERX = 120, CORNERY = 9;
 
-	public float screenWidth;
-	public float screenHeight;
+	public float screenWidth, screenHeight, blockRatio = .117f, cxRat = .167f,
+			cyRat = .005f, pxRat = .981f, pyRat = .744f;
 	private Paint blackPaint;
 	private Paint textPaint;
 	private ArrayList<BlockController> blocks;
@@ -40,7 +41,7 @@ public class GameEngine {
 	private static Game gameActivity;
 
 	public void Init(Context context) {
-		setSurfaceDimensions(540, 960);
+		// setSurfaceDimensions(540, 960);
 
 		gameOver = false;
 		engineContext = context;
@@ -48,12 +49,14 @@ public class GameEngine {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(engineContext);
 
-		useImage = prefs.getBoolean("picture_preference", false);
+		useImage = prefs.getBoolean("picture_preference", true);
 		String temp = prefs.getString("outerColor_preference", "1");
 		Log.v("TOON", temp);
 		outerColor = Integer.getInteger(temp, Color.RED);
-		
-		innerColor = Integer.getInteger(prefs.getString("innerColor_preference", Color.BLACK+ ""), Color.BLACK);
+
+		innerColor = Integer.getInteger(
+				prefs.getString("innerColor_preference", Color.BLACK + ""),
+				Color.BLACK);
 		margin = prefs.getFloat("Margin", .18f);
 
 		blackPaint = new Paint();
@@ -66,7 +69,7 @@ public class GameEngine {
 
 		background = new GfxObject();
 		background.bitmap = BitmapFactory.decodeResource(
-				context.getResources(), R.drawable.background_proto1);
+				context.getResources(), R.drawable.background);
 
 		blocks = new ArrayList<BlockController>();
 
@@ -80,13 +83,23 @@ public class GameEngine {
 
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
+
+		background.scaleBitmap((int) screenWidth, (int) screenHeight);
+
 		activeBlockRow = 1;
-		// blocks.get(0).setPlaySize(screenWidth, screenHeight);
-		blocks.get(0).setPlaySize(SIZEX, SIZEY);
-		blocks.get(0).setPlayCorner(CORNERX, CORNERY);
+
+		blocks.get(0).setPlaySize(
+				(int) ((screenWidth * pxRat) - (screenWidth * cyRat)),
+				(int) ((screenHeight * pyRat) - (screenHeight * cyRat)));
+		
+		blocks.get(0).setPlayCorner((int) (screenWidth * cxRat),
+				(int) (screenHeight * cyRat));
+		
 		blocks.get(0).setImageUse(useImage);
 		blocks.get(0).setOuterColor(outerColor);
 		blocks.get(0).setInnerColor(innerColor);
+		
+		blocks.get(0).setBlockSize((int) (screenWidth * blockRatio));
 	}
 
 	public void onDestroy() {
@@ -109,7 +122,7 @@ public class GameEngine {
 	public void update(int deltatime) {
 		if (gameOver)
 			return;
-		
+
 		blocks.toArray(new BlockController[0])[activeBlockRow - 1]
 				.update(deltatime);
 	}
@@ -117,7 +130,7 @@ public class GameEngine {
 	public void draw(Canvas canvas) {
 		if (gameOver || canvas == null)
 			return;
-		
+
 		canvas.drawColor(Color.BLACK);
 		background.drawCornered(canvas, 0, 0, textPaint);
 		for (BlockController c : blocks.toArray(new BlockController[0]))
@@ -191,7 +204,8 @@ public class GameEngine {
 		newBlockRow.setPlaySize(screenWidth, screenHeight);
 
 		blocks.add(newBlockRow);
-		Log.v("MediaCaller", "Now requesting track row" + (activeBlockRow - 1) + ".mp3");
+		Log.v("MediaCaller", "Now requesting track row" + (activeBlockRow - 1)
+				+ ".mp3");
 		gameActivity.playRowSound(activeBlockRow - 1);
 	}
 
